@@ -1,0 +1,95 @@
+<div class="container">
+  <div class="ui-g">
+    <div class="ui-g-12">
+      <h3>Tarefas</h3>
+      <p-table [value]="tarefas" dataKey="descricao" [responsive]="true" [paginator]="true" [rows]="10">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3em"></th>
+            <th>Descrição</th>
+            <th style="width:8em"></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-tarefa let-expanded="expanded">
+          <tr>
+            <td colspan="3">
+              <a href="#" [pRowToggler]="tarefa">
+                <i [ngClass]="expanded ? 'pi pi-fw pi-chevron-circle-down' : 'pi pi-fw pi-chevron-circle-right'"
+                  style="vertical-align: middle;padding-bottom: .1em;"></i>
+                <span>{{tarefa.descricao}}</span>
+              </a>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-tarefa>
+          <tr *ngFor="let item of tarefa.itens">
+            <td>
+              <p-checkbox [(ngModel)]="item.concluido" [binary]="true"
+                (onChange)="atualizarPropriedadeConcluido(item.id, item.concluido)">
+              </p-checkbox>
+            </td>
+            <td>{{item.descricao}}</td>
+            <td style="text-align:center">
+              <button pButton type="button" icon="pi pi-trash" (click)="excluirItem(item.id)" pTooltip="Excluir"
+                tooltipPosition="top"></button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <button type="button" pButton icon="pi pi-plus" label="Adicionar Item"
+                (click)="showDialogToAddItem(tarefa.id)"></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="summary" let-tarefa>
+          <div style="text-align:left">
+            <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAddLista()"
+              label="Adicionar Lista"></button>
+          </div>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+
+<p-dialog header="Cadastro de lista" [(visible)]="displayDialogLista" [focusOnShow]="false" [responsive]="true"
+  showEffect="fade" [modal]="true" [style]="{width: '300px'}">
+  <div class="p-grid ui-fluid" *ngIf="tarefa">
+    <div class="p-col-4">
+      <label for="descricao">Descrição</label>
+    </div>
+    <div class="p-col-8">
+      <input pInputText id="descricao" [(ngModel)]="tarefa.descricao" autofocus required #descricao="ngModel" />
+      <p-message severity="error" text="Informe uma descrição"
+        *ngIf="descricao.hasError('required') && descricao.dirty">
+      </p-message>
+    </div>
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      <button type="button" pButton icon="pi pi-check" (click)="salvarLista()" label="Salvar"
+        [disabled]="!tarefa?.descricao"></button>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="Cadastro de item" [(visible)]="displayDialogItem" [focusOnShow]="false" [responsive]="true"
+  showEffect="fade" [modal]="true" [style]="{width: '300px'}">
+  <div class="p-grid ui-fluid" *ngIf="item">
+    <div class="p-col-4">
+      <label for="descricao">Descrição</label>
+    </div>
+    <div class="p-col-8">
+      <input pInputText id="descricao" [(ngModel)]="item.descricao" autofocus required #descricao="ngModel" />
+      <p-message severity="error" text="Informe uma descrição"
+        *ngIf="descricao.hasError('required') && descricao.dirty">
+      </p-message>
+    </div>
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      <button type="button" pButton icon="pi pi-check" (click)="salvarItem()" label="Salvar"
+        [disabled]="!item?.descricao"></button>
+    </div>
+  </p-footer>
+</p-dialog>
