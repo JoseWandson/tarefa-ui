@@ -5,7 +5,6 @@ import { MessageService } from 'primeng/api';
 import { Tarefa, Item } from '../core/model';
 import { TarefaService } from './tarefa.service';
 import { ErrorHandlerService } from '../core/error-handler.service';
-import { FormGroup } from '@angular/forms';
 import { ItemService } from './item.service';
 
 @Component({
